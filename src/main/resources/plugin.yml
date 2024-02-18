@@ -12,3 +12,9 @@ description: >
   ZPixel of first version is copy of popular MMO in SNG countries. We will update it, when will have a money on own experiments.
 
 database: true
+depend  : [ AuthMe ]
+
+commands:
+  order:
+    description: Place an order
+    usage      : /order <nickname> <firstname> <surname> <alias> <faction> <account verification status> <whitelist permission> <password> <password confirmation>
