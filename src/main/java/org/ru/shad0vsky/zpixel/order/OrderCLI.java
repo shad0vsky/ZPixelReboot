@@ -12,8 +12,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.ru.shad0vsky.zpixel.ZPixelReboot;
-import org.ru.shad0vsky.zpixel.faction.FactionDAO;
-import org.ru.shad0vsky.zpixel.faction.FactionEntity;
+import org.ru.shad0vsky.zpixel.faction.database.FactionDAO;
+import org.ru.shad0vsky.zpixel.faction.database.FactionEntity;
 import org.ru.shad0vsky.zpixel.player.PlayerEntity;
 import org.ru.shad0vsky.zpixel.player.PlayerEntityDAO;
 
@@ -54,8 +54,7 @@ public class OrderCLI implements CommandExecutor, TabCompleter {
         }
 
         String        factionName   = args[4].toLowerCase();
-        FactionDAO    factionDAO    = new FactionDAO();
-        FactionEntity factionEntity = factionDAO.get(factionName);
+        FactionEntity factionEntity = FactionDAO.getInstance().get(factionName);
         if ( factionEntity == null ) {
             plugin.getLogger().info(reader.cliInvalidFactionMessage);
             return true;
@@ -82,7 +81,7 @@ public class OrderCLI implements CommandExecutor, TabCompleter {
             case 1    -> List.of("f");
             case 2    -> List.of("s");
             case 3    -> List.of("a");
-            case 4    -> matching(new FactionDAO().get().stream().map(FactionEntity::getID), args[4]);
+            case 4    -> matching(FactionDAO.getInstance().get().stream().map(FactionEntity::getID), args[4]);
             case 5, 6 -> Arrays.asList("false", "true");
             case 7    -> List.of(RandomStringUtils.random(new Random().nextInt(10, 15), true, true));
             case 8    -> List.of(args[7]);

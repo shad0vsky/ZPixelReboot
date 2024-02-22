@@ -14,12 +14,13 @@ import java.util.UUID;
 
 public class PlayerEntityDAO implements ZPixelDatabaseDAO<PlayerEntity> {
 
-    private static final String CREATE_QUERY  = "CREATE TABLE IF NOT EXISTS players (name VARCHAR(16) PRIMARY KEY, firstname VARCHAR(16) NOT NULL, surname VARCHAR(16), alias VARCHAR(16), factionUUID VARCHAR(36), isVerified BOOLEAN, isWhitelistIgnored BOOLEAN)";
-    private static final String INSERT_QUERY  = "INSERT INTO players (name, firstname, surname, alias, factionUUID, isVerified, isWhitelistIgnored) VALUES (?, ?, ?, ?, ?, ?, ?)";
-    private static final String UPDATE_QUERY  = "UPDATE players SET firstname = ?, surname = ?, alias = ?, factionUUID = ?, isVerified = ?, isWhitelistIgnored = ? WHERE name = ?";
-    private static final String DELETE_QUERY  = "DELETE FROM players WHERE name = ?";
-    private static final String GET_ONE_QUERY = "SELECT * FROM players WHERE name = ?";
-    private static final String GET_ALL_QUERY = "SELECT * FROM players";
+    private static final    String          CREATE_QUERY  = "CREATE TABLE IF NOT EXISTS players (name VARCHAR(16) PRIMARY KEY, firstname VARCHAR(16) NOT NULL, surname VARCHAR(16), alias VARCHAR(16), factionUUID VARCHAR(36), isVerified BOOLEAN, isWhitelistIgnored BOOLEAN)";
+    private static final    String          INSERT_QUERY  = "INSERT INTO players (name, firstname, surname, alias, factionUUID, isVerified, isWhitelistIgnored) VALUES (?, ?, ?, ?, ?, ?, ?)";
+    private static final    String          UPDATE_QUERY  = "UPDATE players SET firstname = ?, surname = ?, alias = ?, factionUUID = ?, isVerified = ?, isWhitelistIgnored = ? WHERE name = ?";
+    private static final    String          DELETE_QUERY  = "DELETE FROM players WHERE name = ?";
+    private static final    String          GET_ONE_QUERY = "SELECT * FROM players WHERE name = ?";
+    private static final    String          GET_ALL_QUERY = "SELECT * FROM players";
+    private static volatile PlayerEntityDAO instance;
 
     static {
         try ( Statement statement = ZPixelReboot.getInstance().getDatabase().getConnection().createStatement() ) {
@@ -27,6 +28,21 @@ public class PlayerEntityDAO implements ZPixelDatabaseDAO<PlayerEntity> {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    private PlayerEntityDAO() {
+
+    }
+
+    public static PlayerEntityDAO getInstance() {
+        if (instance == null) {
+            synchronized (PlayerEntityDAO.class) {
+                if (instance == null) {
+                    instance = new PlayerEntityDAO();
+                }
+            }
+        }
+        return instance;
     }
 
     @Override

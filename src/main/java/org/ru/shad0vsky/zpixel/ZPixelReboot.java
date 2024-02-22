@@ -1,5 +1,6 @@
 package org.ru.shad0vsky.zpixel;
 
+import com.samjakob.spigui.SpiGUI;
 import lombok.Getter;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.ru.shad0vsky.zpixel.database.ZPixelDatabase;
@@ -15,6 +16,8 @@ public final class ZPixelReboot extends JavaPlugin {
     private static ZPixelReboot   instance;
     @Getter
     private        ZPixelDatabase database;
+    @Getter
+    private        SpiGUI         spiGUI;
 
     @Override
     public void onEnable() {

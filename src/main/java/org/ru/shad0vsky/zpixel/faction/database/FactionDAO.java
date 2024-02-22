@@ -1,4 +1,4 @@
-package org.ru.shad0vsky.zpixel.faction;
+package org.ru.shad0vsky.zpixel.faction.database;
 
 import lombok.NonNull;
 import org.ru.shad0vsky.zpixel.ZPixelReboot;
@@ -14,12 +14,13 @@ import java.util.UUID;
 
 public class FactionDAO implements ZPixelDatabaseDAO<FactionEntity> {
 
-    private static final String CREATE_QUERY    = "CREATE TABLE IF NOT EXISTS factions (name VARCHAR(16) PRIMARY KEY, uuid VARCHAR(36) NOT NULL, displayName VARCHAR(16), displayColor CHAR(1))";
-    private static final String INSERT_QUERY    = "INSERT INTO factions (name, uuid, displayName, displayColor) VALUES (?, ?, ?, ?)";
-    private static final String UPDATE_QUERY    = "UPDATE factions SET displayName = ?, displayColor = ? WHERE name = ?";
-    private static final String DELETE_QUERY    = "DELETE FROM factions WHERE name = ?";
-    private static final String GET_BY_ID_QUERY = "SELECT * FROM factions WHERE name = ?";
-    private static final String GET_ALL_QUERY   = "SELECT * FROM factions";
+    private static final    String     CREATE_QUERY    = "CREATE TABLE IF NOT EXISTS factions (name VARCHAR(16) PRIMARY KEY, uuid VARCHAR(36) NOT NULL, displayName VARCHAR(16), displayColor CHAR(1))";
+    private static final    String     INSERT_QUERY    = "INSERT INTO factions (name, uuid, displayName, displayColor) VALUES (?, ?, ?, ?)";
+    private static final    String     UPDATE_QUERY    = "UPDATE factions SET displayName = ?, displayColor = ? WHERE name = ?";
+    private static final    String     DELETE_QUERY    = "DELETE FROM factions WHERE name = ?";
+    private static final    String     GET_BY_ID_QUERY = "SELECT * FROM factions WHERE name = ?";
+    private static final    String     GET_ALL_QUERY   = "SELECT * FROM factions";
+    private static volatile FactionDAO instance;
 
     static {
         try ( Statement statement = ZPixelReboot.getInstance().getDatabase().getConnection().createStatement() ) {
@@ -27,6 +28,21 @@ public class FactionDAO implements ZPixelDatabaseDAO<FactionEntity> {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    private FactionDAO() {
+
+    }
+
+    public static FactionDAO getInstance() {
+        if ( instance == null ) {
+            synchronized (FactionDAO.class) {
+                if ( instance == null ) {
+                    instance = new FactionDAO();
+                }
+            }
+        }
+        return instance;
     }
 
     @Override
@@ -101,7 +117,7 @@ public class FactionDAO implements ZPixelDatabaseDAO<FactionEntity> {
         return factionEntities;
     }
 
-    private FactionEntity mapResultSetToFactionEntity(ResultSet resultSet) throws SQLException {
+    private FactionEntity mapResultSetToFactionEntity(@NonNull ResultSet resultSet) throws SQLException {
         String name         = resultSet.getString("name");
         UUID   uuid         = UUID.fromString(resultSet.getString("uuid"));
         String displayName  = resultSet.getString("displayName");

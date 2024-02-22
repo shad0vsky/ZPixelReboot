@@ -1,4 +1,4 @@
-package org.ru.shad0vsky.zpixel.faction;
+package org.ru.shad0vsky.zpixel.faction.database;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

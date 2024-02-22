@@ -13,7 +13,6 @@ import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.ru.shad0vsky.zpixel.ZPixelReboot;
 import org.ru.shad0vsky.zpixel.player.PlayerEntity;
-import org.ru.shad0vsky.zpixel.player.PlayerEntityService;
 
 import java.util.HashSet;
 import java.util.Set;
